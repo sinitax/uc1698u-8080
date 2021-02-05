@@ -1,0 +1,11 @@
+{
+    "name" : "uc1698u-8080",
+    "version": "0.1",
+    "build" : {
+        "srcDir" : ".",
+        "srcFilter": [
+            "+<*.cpp>",
+            "+<*.h>"
+        ]
+    }
+}

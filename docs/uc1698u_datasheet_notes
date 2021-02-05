@@ -1,0 +1,25 @@
+## General
+
+Backlight functional at 3.3V with 320 Ohm
+
+## UC1698u LCD
+
+Supply voltage (Vdd) : 1.8V ~ 3.3V  (3.3V is fine)
+Supply current       : <= 15ma
+
+Connect V_LCD-IN to V_LCD-OUT together for internal voltage converter
+
+C_BX = 2.2uF at 5V
+C_S = 150 ~ 220nF at 25V
+C_L = 330nF at 25V
+
+BM0 and BM1 set LOW for 8080 8-bit parallel mode
+
+CS0 is low active chip select
+
+CD is A0 and controls wether data is DISPLAY DATA (HIGH) or CONTROL DATA (LOW)
+
+WR1 for read, WR0 for write (both low enable)
+
+CONTROL REGISTERS (PAGE 11)
+COMMAND TABLE     (PAGE 14)
