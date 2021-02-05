@@ -13,3 +13,5 @@ On linux the library can be installed by running `extra/install.sh`.
 A simple example for writing an image to the display can be found in the `examples` directory.
 
 Wiring for an arduino pro mini and other relevant documentation can be found in the `docs` directory.
+
+![demo image](docs/demo.jpg)
