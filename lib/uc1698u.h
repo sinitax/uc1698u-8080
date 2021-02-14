@@ -73,7 +73,6 @@ void uc1698u_64k_encode(uint8_t *b1, uint8_t *b2, uint8_t r, uint8_t g, uint8_t 
 
 void uc1698u_init_pins(struct uc1698u_config *config);
 void uc1698u_init_erc160160(struct uc1698u_config *config);
-/* TODO: uc1698u_init_lcd() using config dims */
 void uc1698u_test_visual(struct uc1698u_config *config);
 void uc1698u_wake_display(struct uc1698u_config *config);
 

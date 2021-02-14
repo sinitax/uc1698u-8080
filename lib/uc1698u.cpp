@@ -4,19 +4,15 @@
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 
-#define NOP __asm__ __volatile__ ("nop\n\t")
-
-/* REF:  https://www.best-microcontroller-projects.com/arduino-digitalwrite.html */
-#define setPinH(b) ( (b) < 8 ? PORTD |= (1 << (b)) : PORTB |= (1 << (b - 8)) )
-#define setPinL(b) ( (b) < 8 ? PORTD &= ~(1 << (b)) : PORTB &= ~(1 << (b - 8)) )
-#define setPin(b, d) digitalWrite(b, d) //( (d) ? setPinH(b) : setPinL(b) )
-#define tstPin(b) digitalRead(b) //( (b) < 8 ? (PORTD & (1 << (b))) != 0 : (PORTB & (1 << (b - 8))) != 0 )
+#define setPin(b, d) digitalWrite(b, d)
+#define tstPin(b) digitalRead(b)
 
 /* NOTES:
  *
  * [1]: for some commands the datasheet claims only 7 bits active, however 8 bits
  *      are required to write > 127 .. in practice all 8 bits are read and needed
  *      to configure e.g. 160 COM end
+ *
 */
 
 struct uc1698u_state uc1698u_default_state = {
@@ -202,11 +198,8 @@ uc1698u_write(struct uc1698u_config *config, int type, int argcount, ...)
 		for (i = 0; i < 8; i++)
 			setPin(config->pin.DX[i], BITSLICE(arg, 1, i));
 
-		NOP; NOP; NOP; NOP; NOP;
 		setPin(config->pin.WR0, LOW);
-		NOP; NOP; NOP; NOP; NOP;
 		setPin(config->pin.WR0, HIGH);
-		NOP; NOP; NOP; NOP; NOP;
 	}
 	va_end(ap);
 
@@ -230,11 +223,8 @@ uc1698u_read(struct uc1698u_config *config, int argcount, ...)
 	for (k = 0; k < argcount; k++) {
 		arg = va_arg(ap, uint8_t*);
 
-		NOP; NOP; NOP; NOP; NOP;
 		setPin(config->pin.WR1, LOW);
-		NOP; NOP; NOP; NOP; NOP;
 		setPin(config->pin.WR1, HIGH);
-		NOP; NOP; NOP; NOP; NOP;
 
 		*arg = 0;
 		for (i = 0; i < 8; i++)
@@ -261,6 +251,7 @@ void
 uc1698u_write_tripix_64K(struct uc1698u_config *config, uint8_t a, uint8_t b, uint8_t c)
 {
 	uint8_t b1, b2;
+
 	uc1698u_64k_encode(&b1, &b2, a, b, c);
 	uc1698u_write(config, UC1698U_DATA, 2, b1, b2);
 }
@@ -274,20 +265,9 @@ uc1698u_write_pixel_64K(struct uc1698u_config *config, uint8_t x, uint8_t y, uin
 	uc1698u_set_row_address(config, config->state.window_prog_start_row + y);
 	uc1698u_read(config, 3, &dummy, &b1, &b2);
 
-	Serial.print("Before: ");
-	Serial.print((int)b1, BIN);
-	Serial.write(",");
-	Serial.print((int)b2, BIN);
-	Serial.write("\n\r");
-
 	uc1698u_64k_decode(b1, b2, &triplet[0], &triplet[1], &triplet[2]);
 	triplet[x % 3] = val;
 	uc1698u_64k_encode(&b1, &b2, triplet[0], triplet[1], triplet[2]);
-
-	Serial.print((int)b1, BIN);
-	Serial.write(",");
-	Serial.print((int)b2, BIN);
-	Serial.write("\n\r");
 
 	uc1698u_set_row_address(config, config->state.window_prog_start_row + y);
 	uc1698u_set_col_address(config, config->state.window_prog_start_col + x / 3);
@@ -298,6 +278,7 @@ void
 uc1698u_fill_screen_64K(struct uc1698u_config *config, uint8_t fill)
 {
 	int x, y;
+
 	uc1698u_set_pixpos(config, 0, 0);
 	for (x = config->state.window_prog_start_col; x <= config->state.window_prog_end_col; x++) {
 		for (y = config->state.window_prog_start_row; y <= config->state.window_prog_end_row; y++) {
