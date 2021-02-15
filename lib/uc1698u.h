@@ -94,7 +94,7 @@ void uc1698u_set_pixpos(struct uc1698u_config *config, uint16_t x, uint16_t y);
 void uc1698u_write_pixel_64K(struct uc1698u_config *config, uint8_t x, uint8_t y, uint8_t val);
 void uc1698u_fill_screen_64K(struct uc1698u_config *config, uint8_t fill);
 void uc1698u_write_tripix_64K(struct uc1698u_config *config, uint8_t a, uint8_t b, uint8_t c);
-void uc1698u_write_image_64K(struct uc1698u_config *config, uint8_t *data,
+void uc1698u_write_image_64K(struct uc1698u_config *config, const uint8_t *data,
 		uint16_t sx, uint16_t sy, uint16_t width, uint16_t height);
 
 /* commands */

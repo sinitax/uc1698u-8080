@@ -288,7 +288,7 @@ uc1698u_fill_screen_64K(struct uc1698u_config *config, uint8_t fill)
 }
 
 void
-uc1698u_write_image_64K(struct uc1698u_config *config, uint8_t *data,
+uc1698u_write_image_64K(struct uc1698u_config *config, const uint8_t *data,
 		uint16_t sx, uint16_t sy, uint16_t width, uint16_t height)
 {
 	uint32_t si;
